@@ -1,0 +1,72 @@
+contractprop:
+    confname: ContractProp.yaml
+    cpdatadir: ./config/Manual/
+datafields:
+    fadfields:
+        - MA3
+    fcsvdatafields: []
+    findinames: []
+    finstrnames: []
+    sadfields:
+        - MA3
+    scsvdatafields:
+        - Open
+        - Close
+        - High
+        - Low
+        - Volume
+        - Amount
+    sindinames:
+        - Open
+        - Close
+        - High
+        - Low
+        - Volume
+        - MA3
+    sinstrnames:
+        - sh510050
+matcherparam:
+    matcherslippage4f: 1
+    matcherslippage4s: 0.01
+stgmodel:
+    smdatadir: ./config/Manual
+    smgeptype: Genome
+    smname: Strategy
+    strategymodule: Simple
+va:
+    sacct:
+        inittime: 2023.01.18T09:35:00.000
+        udtime: 2023.01.30T14:10:00.000
+        mktval: 99834.48130000001
+        fundavail: 48124.48130000001
+        allprofit: 0
+        allcommission: 5.5187
+        posmap:
+            sh510050:
+                udtime: 2023.01.30T14:10:00.000
+                postdys: []
+                posprevs:
+                    - udtime: 2023.01.30T14:10:00.000
+                      instid: sh510050
+                      baseprice: 51.87
+                      lastprice: 0
+                      num: 10
+                      equity: 0
+                      scp:
+                        contractsize: 100
+                        transferfeerate: 1e-05
+                        taxrate: 0
+                        commbrokerrate: 6.87e-05
+        marketvalueslice: []
+        uuid: a83ea62a-7320-43bb-8768-d29c2d515d00
+    facct:
+        inittime: ""
+        udtime: ""
+        bmkval: 0
+        mktval: 0
+        fundavail: 0
+        allprofit: 0
+        allcommission: 0
+        posmap: {}
+        marketvalueslice: []
+        uuid: ""

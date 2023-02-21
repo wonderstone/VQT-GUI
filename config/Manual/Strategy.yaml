@@ -1,0 +1,7 @@
+---
+# viper's GetStringMap function makes key value lowercase
+default:
+    snum:  10
+    fnum:  10
+    stimecritic:  "13:25"
+    ftimecritic:  "14:50"

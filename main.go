@@ -10,54 +10,81 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"github.com/wonderstone/VQT-GUI/backtest"
 )
 
 func main() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("VQT-GUI_Simple_Illustration")
-	// * 0. lab for output
+	myWindow := myApp.NewWindow("VQT-GUI_V0.1")
+	// * Backtest： 0. lab for final result output
 	// make a label for output with white color
-	la := widget.NewLabel("res")
+	laRes := widget.NewLabel("This is the final result:")
 	// * 1. load the dir for BT
 	// make a form for BTDir
-	BTdirEntry := widget.NewEntry()
-	BTdirEntry.SetPlaceHolder("./config/manual/")
-	BTdirEntry.Text = "./config/manual/"
+	EntryBTdir := widget.NewEntry()
+	EntryBTdir.SetPlaceHolder("./config/manual/")
+	EntryBTdir.Text = "./config/manual/"
 
-	form := &widget.Form{
+	formBTdir := &widget.Form{
 		Items: []*widget.FormItem{
-			{Text: "BTDir", Widget: BTdirEntry},
+			{Text: "BTDir", Widget: EntryBTdir},
 		},
 	}
-	// make a button with a callback change la with BTdirEntry.Text
-	btn := widget.NewButton("ReadConfig", func() {
-		la.SetText(BTdirEntry.Text)
-	})
 
-	// split the form and button
-	hs := container.NewHSplit(form, btn)
-	hs.SetOffset(0.75)
+	// - add the func to read the yaml file and get the info and fill the
 
-	// make a gray separator
-	sep := canvas.NewRectangle(color.Gray{Y: 128})
-	// add hs and sep in a vbox
-	BTloadCont := container.NewVBox(hs, sep)
+	// - form with the info
+
 	// * 2. make a form for Instruments and Periods and Indicators
 	// make a form for Instruments and Periods and Indicators
-	BTform := &widget.Form{
+	EntryInstruments := widget.NewEntry()
+	EntryBDate := widget.NewEntry()
+	EntryEDate := widget.NewEntry()
+	EntryIndicators := widget.NewEntry()
+	EntrySubIndicators := widget.NewEntry()
+	EntryCalIndicators := widget.NewEntry()
+
+	formBTinfo := &widget.Form{
 		Items: []*widget.FormItem{
-			{Text: "Instruments", Widget: widget.NewEntry()},
-			{Text: "BeginDate", Widget: widget.NewEntry()},
-			{Text: "EndDate", Widget: widget.NewEntry()},
-			{Text: "Indicators", Widget: widget.NewEntry()},
+			{Text: "Instruments", Widget: EntryInstruments},
+			{Text: "BeginDate", Widget: EntryBDate},
+			{Text: "EndDate", Widget: EntryEDate},
+			{Text: "Indicators", Widget: EntryIndicators},
+			{Text: "SubIndicators", Widget: EntrySubIndicators},
+			{Text: "CalIndicators", Widget: EntryCalIndicators},
 		},
 	}
-	// add a button for DataDownload
-	btndownload := widget.NewButton("DataDownload", func() {
+	//
+	// make a button with a callback change la with BTdirEntry.Text
+	btnReadConf := widget.NewButton("ReadConfig", func() {
+
+		// read the yaml file from dir and output the info
+		instr, bd, ed, inds, sub, cal := backtest.BtnReadConf_Clicked(EntryBTdir.Text)
+		// change the formBTinfo with the info
+		EntryInstruments.SetText(instr)
+		EntryBDate.SetText(bd)
+		EntryEDate.SetText(ed)
+		EntryIndicators.SetText(inds)
+		EntrySubIndicators.SetText(sub)
+		EntryCalIndicators.SetText(cal)
 	})
+	// split the form and button
+	hsBTdir := container.NewHSplit(formBTdir, btnReadConf)
+	hsBTdir.SetOffset(0.75)
+	// make a gray separator
+	sepBTinfo := canvas.NewRectangle(color.Gray{Y: 128})
+	// add hs and sep in a vbox
+	contBTdir := container.NewVBox(hsBTdir, sepBTinfo)
+	// add a button for DataDownload
+	btnDownload := widget.NewButton("DataDownload", func() {
+	})
+	// - add a func to download data
+	// - void for now!!
 
 	// should read the yaml file and get entries
+	// / this string slice part should be derived from the EntryCalIndicators.text
 	entries := []string{"MA3", "Var5"}
+
 	ii, IIform := SelectFactor(entries)
 	// make two buttons for SetIndiInfo and preprocess
 	btn1 := widget.NewButton("SetIndiInfo", func() {})
@@ -69,7 +96,7 @@ func main() {
 	sep1 := canvas.NewRectangle(color.Gray{Y: 128})
 
 	// add hs1 and sep1 in a vbox
-	BTEntryCont := container.NewVBox(BTform, btndownload, ii, IIform, hs1, sep1)
+	BTEntryCont := container.NewVBox(formBTinfo, btnDownload, ii, IIform, hs1, sep1)
 
 	// * 3. make a type or select input for backtest
 	// add a blank form for Strategy info
@@ -130,7 +157,7 @@ func main() {
 		line)
 
 	// make a content for backtest tab with separator
-	content := container.NewVBox(BTloadCont, BTEntryCont, STGCont, hs2, grid, la)
+	content := container.NewVBox(contBTdir, BTEntryCont, STGCont, hs2, grid, laRes)
 
 	// + Realtime 1. load the dir for RT
 	// make a form for RTDir
